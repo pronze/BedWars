@@ -88,6 +88,8 @@ public class Main extends JavaPlugin {
         }
 
         gameCore = new GameCore(this, BedWarsCommand.COMMAND_NAME, Permissions.ADMIN_COMMAND, mainConfig.getBoolean(MainConfig.ConfigPaths.VERBOSE));
+        gameCore.setVisualsConfig(visualsConfig);
+
         try {
             commands.loadScreamingCommands(gameCore.getClass());
         } catch (URISyntaxException | IOException e) {

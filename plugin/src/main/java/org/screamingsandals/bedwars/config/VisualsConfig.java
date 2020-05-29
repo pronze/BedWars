@@ -5,7 +5,6 @@ import org.screamingsandals.lib.config.DefaultConfigBuilder;
 import java.io.File;
 
 public class VisualsConfig extends org.screamingsandals.lib.gamecore.config.VisualsConfig {
-    public static String PATH_SCOREBOARDS_CUSTOM_ENABLED = "scoreboards.custom.enabled";
 
     public VisualsConfig(File configFile) {
         super(configFile);
@@ -22,6 +21,7 @@ public class VisualsConfig extends org.screamingsandals.lib.gamecore.config.Visu
         DefaultConfigBuilder.start(this)
                 .put(PATH_SCOREBOARDS_ENABLED, true)
                 .put(PATH_SCOREBOARDS_NAME, "%prefix%")
+                .put(PATH_SCOREBOARDS_CUSTOM_ENABLED, false)
 
                 .put(PATH_BOSSBARS_ENABLED, true)
                 .put(PATH_BOSSBARS_COLOR_LOBBY, "YELLOW")

@@ -21,14 +21,13 @@ public class LeaveCommand implements ScreamingCommand {
                 .handleSubPlayerCommand((player, args) -> {
                     final var gamePlayer = GameCore.getPlayerManager().getRegisteredPlayer(player);
                     if (!gamePlayer.isInGame()) {
-                        System.out.println("what");
                         mpr("commands.leave.failed")
                                 .game(gamePlayer.getActiveGame())
                                 .send(player);
                         return;
                     }
 
-                    gamePlayer.getActiveGame().leave(gamePlayer);
+                    gamePlayer.leave();
                 });
     }
 }

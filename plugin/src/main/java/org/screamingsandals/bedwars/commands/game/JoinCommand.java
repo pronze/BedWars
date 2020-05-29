@@ -37,17 +37,17 @@ public class JoinCommand implements ScreamingCommand {
                             return;
                         }
 
-                        game.get().join(gamePlayer);
+                        gamePlayer.join(game.get());
                         return;
                     }
 
                     final var game = GameCore.getGameManager().getFirstAvailableGame();
-                    if (game == null) {
+                    if (game.isEmpty()) {
                         mpr("general.errors.no-game-found")
                                 .send(player);
                         return;
                     }
-                    game.join(gamePlayer);
+                    gamePlayer.join(game.get());
                 });
     }
 }
