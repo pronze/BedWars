@@ -19,7 +19,13 @@ public class JoinCommand implements ScreamingCommand {
         SubCommandBuilder.bukkitSubCommand()
                 .createSubCommand(BedWarsCommand.COMMAND_NAME, "join", Permissions.JOIN_COMMAND, Collections.emptyList())
                 .handleSubPlayerCommand((player, args) -> {
-                    final var gamePlayer = GameCore.getPlayerManager().getRegisteredPlayer(player);
+                    final var gamePlayerRegistered = GameCore.getPlayerManager().getRegisteredPlayer(player);
+                    if (gamePlayerRegistered.isEmpty()) {
+                        return;
+                    }
+
+                    final var gamePlayer = gamePlayerRegistered.get();
+
                     if (gamePlayer.isInGame()) {
                         mpr("commands.join.failed")
                                 .game(gamePlayer.getActiveGame())

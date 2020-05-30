@@ -179,7 +179,7 @@ public class AdminCommand implements ScreamingCommand {
     private void handleCreate(String gameName, Player player) {
         final var gameManager = Main.getGameManager();
         if (gameManager.isGameRegistered(gameName) || gameManager.isInBuilder(gameName)) {
-            mpr("core.errors.game-already-created")
+            mpr("general.errors.game-already-created")
                     .replace("%game%", gameName)
                     .send(player);
             return;
