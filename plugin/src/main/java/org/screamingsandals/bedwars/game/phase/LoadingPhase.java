@@ -7,14 +7,14 @@ import org.screamingsandals.lib.gamecore.core.phase.GamePhase;
 
 public class LoadingPhase extends GamePhase {
 
-    public LoadingPhase(GameCycle gameCycle, int runTime) {
-        super(gameCycle, runTime);
+    //One tick long phase
+    public LoadingPhase(GameCycle gameCycle) {
+        super(gameCycle);
+        oneTick = true;
     }
 
     @Override
     public void prepare(GameFrame gameFrame) {
-        //prepare arena shits here!
-
         getGameFrame().setActiveState(GameState.WAITING);
     }
 

@@ -28,8 +28,7 @@ public class MainConfig extends SpigotConfigAdapter {
                 .put(ConfigPaths.BUNGEE_MULTI_GAME_MODE, false)
                 .put(ConfigPaths.BUNGEE_LOBBY_SERVER, "your_hub_server_name_here")
                 .put(ConfigPaths.BUNGEE_RESTART_ON_GAME_END, false)
-                .put(ConfigPaths.GAME_DEFAULT_LOBBY_TIME, 60)
-                .put(ConfigPaths.GAME_DEFAULT_START_TIME, 10)
+                .put(ConfigPaths.GAME_DEFAULT_START_TIME, 15)
                 .put(ConfigPaths.GAME_DEFAULT_GAME_TIME, 3600)
                 .put(ConfigPaths.GAME_DEFAULT_DEATHMATCH_TIME, 600)
                 .put(ConfigPaths.GAME_DEFAULT_END_TIME, 5)
@@ -48,7 +47,6 @@ public class MainConfig extends SpigotConfigAdapter {
         String BUNGEE_LOBBY_SERVER = "bungeecord.lobby-server-name";
         String BUNGEE_RESTART_ON_GAME_END = "bungeecord.restart-server-after-game-end";
 
-        String GAME_DEFAULT_LOBBY_TIME = "game.times.lobby-time";
         String GAME_DEFAULT_START_TIME = "game.times.starting-time";
         String GAME_DEFAULT_GAME_TIME = "game.times.game-time";
         String GAME_DEFAULT_DEATHMATCH_TIME = "game.times.deathmatch-time";

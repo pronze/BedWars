@@ -4,7 +4,9 @@ import org.screamingsandals.bedwars.api.events.game.BedWarsGameCyclePrepareEvent
 import org.screamingsandals.bedwars.game.cycle.MultiGameBungeeCycle;
 import org.screamingsandals.bedwars.game.cycle.MultiGameCycle;
 import org.screamingsandals.bedwars.game.cycle.SingleGameBungeeCycle;
+import org.screamingsandals.bedwars.game.phase.InGamePhase;
 import org.screamingsandals.bedwars.game.phase.LoadingPhase;
+import org.screamingsandals.bedwars.game.phase.StartingPhase;
 import org.screamingsandals.bedwars.game.phase.WaitingPhase;
 import org.screamingsandals.lib.gamecore.GameCore;
 import org.screamingsandals.lib.gamecore.core.GameFrame;
@@ -20,9 +22,18 @@ public class Game extends GameFrame {
     }
 
     @Override
+    public void loadDefaults() {
+        super.loadDefaults();
+    }
+
+    @Override
     public boolean prepare() {
         if (!super.prepare()) {
             return false;
+        }
+
+        if (gameCycle != null) {
+            gameCycle.getAvailablePhases().clear();
         }
 
         final var preparedCycle = prepareGameCycle();
@@ -32,15 +43,19 @@ public class Game extends GameFrame {
         }
 
         gameCycle = preparedCycle.get();
-        gameCycle.addPhase(GameState.LOADING, new LoadingPhase(gameCycle, -1));
-        gameCycle.addPhase(GameState.WAITING, new WaitingPhase(gameCycle, lobbyTime));
+        gameCycle.addPhase(GameState.LOADING, new LoadingPhase(gameCycle));
+        gameCycle.addPhase(GameState.WAITING, new WaitingPhase(gameCycle));
+
+        System.out.println(getStartTime());
+        gameCycle.addPhase(GameState.PRE_GAME_COUNTDOWN, new StartingPhase(gameCycle, getStartTime()));
+        gameCycle.addPhase(GameState.IN_GAME, new InGamePhase(gameCycle, getGameTime()));
 
         return true;
     }
 
     private Optional<GameCycle> prepareGameCycle() {
         GameCycle toReturn = null;
-        final var gameType = GameCore.getGameManager().getGameType();
+        final var gameType = GameCore.getGameManager().getGameCycleType();
         final var event = new BedWarsGameCyclePrepareEvent(this);
         if (GameCore.fireEvent(event)) {
             toReturn = event.getGameCycle();

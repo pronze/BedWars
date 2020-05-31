@@ -75,16 +75,17 @@ public class AddTeamAction implements Action {
         }
 
         if (argsSize == 2) {
-            final var typed = args.get(1);
+            System.out.println(args.get(1));
+            final var typed = args.get(1).toUpperCase();
 
             for (TeamColor found : TeamColor.values()) {
-                final var name = found.colorName;
+                final var name = found.name();
 
                 if (name.startsWith(typed)) {
                     toReturn.add(name);
                 }
-                return toReturn;
             }
+            return toReturn;
         }
 
         if (argsSize == 3) {

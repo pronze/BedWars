@@ -311,7 +311,7 @@ public class AdminCommand implements ScreamingCommand {
         switch (action) {
             case "border":
                 return setActions.get(ActionType.Set.BORDER).handleTab(gameBuilder, player, subList);
-            case "spectators-spawn":
+            case "spawn":
                 return setActions.get(ActionType.Set.SPAWN).handleTab(gameBuilder, player, subList);
         }
 

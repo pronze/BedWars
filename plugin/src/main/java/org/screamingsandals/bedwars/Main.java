@@ -16,13 +16,13 @@ import org.screamingsandals.lib.config.ConfigAdapter;
 import org.screamingsandals.lib.debug.Debug;
 import org.screamingsandals.lib.gamecore.GameCore;
 import org.screamingsandals.lib.gamecore.core.GameManager;
-import org.screamingsandals.lib.gamecore.core.GameType;
+import org.screamingsandals.lib.gamecore.core.config.GameConfig;
+import org.screamingsandals.lib.gamecore.core.config.GameValue;
+import org.screamingsandals.lib.gamecore.core.cycle.GameCycleType;
 import org.screamingsandals.lib.gamecore.exceptions.GameCoreException;
 import org.screamingsandals.lib.gamecore.language.GameLanguage;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Collection;
 
 public class Main extends JavaPlugin {
@@ -92,8 +92,7 @@ public class Main extends JavaPlugin {
 
         try {
             commands.loadScreamingCommands(gameCore.getClass());
-        } catch (URISyntaxException | IOException e) {
-            e.printStackTrace();
+        } catch (Throwable ignored) {
         }
 
         try {
@@ -105,6 +104,7 @@ public class Main extends JavaPlugin {
         }
 
         gameManager = (GameManager<Game>) GameCore.getGameManager();
+        loadDefaultConfigForGames();
         gameManager.loadGames();
 
         //Beware of plugin reloading..
@@ -141,15 +141,34 @@ public class Main extends JavaPlugin {
         return file;
     }
 
-    private GameType getGameType() {
+    private GameCycleType getGameType() {
         if (bungee) {
             if (mainConfig.getBoolean(MainConfig.ConfigPaths.BUNGEE_MULTI_GAME_MODE)) {
-                return GameType.MULTI_GAME_BUNGEE;
+                return GameCycleType.MULTI_GAME_BUNGEE;
             }
-            return GameType.SINGLE_GAME_BUNGEE;
+            return GameCycleType.SINGLE_GAME_BUNGEE;
         } else {
-            return GameType.MULTI_GAME;
+            return GameCycleType.MULTI_GAME;
         }
+    }
+
+    private void loadDefaultConfigForGames() {
+        final var gameConfig = gameManager.getGameConfig();
+        //Not configurable by user
+        gameConfig.registerValue(GameConfig.ValueHolder.get(
+                GameConfig.DefaultKeys.TEAMS_ENABLED, true, GameValue.DEFAULT));
+        gameConfig.registerValue(GameConfig.ValueHolder.get(
+                GameConfig.DefaultKeys.STORES_ENABLED, true, GameValue.DEFAULT));
+
+        //Loaded from config
+        gameConfig.registerValue(GameConfig.ValueHolder.get(
+                GameConfig.DefaultKeys.START_TIME, mainConfig.getInt(MainConfig.ConfigPaths.GAME_DEFAULT_START_TIME), GameValue.SHARED));
+        gameConfig.registerValue(GameConfig.ValueHolder.get(
+                GameConfig.DefaultKeys.GAME_TIME, mainConfig.getInt(MainConfig.ConfigPaths.GAME_DEFAULT_GAME_TIME), GameValue.SHARED));
+        gameConfig.registerValue(GameConfig.ValueHolder.get(
+                GameConfig.DefaultKeys.DEATHMATCH_TIME, mainConfig.getInt(MainConfig.ConfigPaths.GAME_DEFAULT_DEATHMATCH_TIME), GameValue.SHARED));
+        gameConfig.registerValue(GameConfig.ValueHolder.get(
+                GameConfig.DefaultKeys.END_GAME_TIME, mainConfig.getInt(MainConfig.ConfigPaths.GAME_DEFAULT_END_TIME), GameValue.SHARED));
     }
 
     public static Main getInstance() {

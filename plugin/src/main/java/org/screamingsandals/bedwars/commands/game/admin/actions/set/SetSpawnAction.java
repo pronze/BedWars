@@ -45,6 +45,12 @@ public class SetSpawnAction implements Action {
                 }
                 break;
             }
+            default: {
+                mpr("commands.admin.actions.set.spawn.invalid-entry")
+                        .game(currentGame)
+                        .sendList(player);
+                break;
+            }
         }
 
         if (argsSize == 2 && type.equalsIgnoreCase("team")) {
@@ -89,19 +95,22 @@ public class SetSpawnAction implements Action {
                 if (found.startsWith(typed)) {
                     toReturn.add(found);
                 }
-                return toReturn;
             }
+            return toReturn;
         }
 
         if (argsSize == 2) {
-            final var typed = args.get(1);
+            if (!args.get(0).equalsIgnoreCase("team")) {
+                return toReturn;
+            }
 
+            final var typed = args.get(1);
             for (var found : gameBuilder.getGameFrame().getAvailableTeams()) {
                 if (found.startsWith(typed)) {
                     toReturn.add(found);
                 }
-                return toReturn;
             }
+            return toReturn;
         }
         return toReturn;
     }

@@ -92,7 +92,6 @@ public class SetBorderAction implements Action {
                     toReturn.add(found);
                 }
             }
-
             return toReturn;
         }
 
@@ -103,10 +102,8 @@ public class SetBorderAction implements Action {
                     toReturn.add(found);
                 }
             }
-
             return toReturn;
         }
-
         return toReturn;
     }
 }
