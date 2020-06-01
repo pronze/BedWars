@@ -105,7 +105,7 @@ public class SetSpawnAction implements Action {
             }
 
             final var typed = args.get(1);
-            for (var found : gameBuilder.getGameFrame().getAvailableTeams()) {
+            for (var found : gameBuilder.getGameFrame().getAvailableTeamsNames()) {
                 if (found.startsWith(typed)) {
                     toReturn.add(found);
                 }

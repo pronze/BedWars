@@ -87,7 +87,8 @@ public class Main extends JavaPlugin {
             Debug.info("GameCore already exists, destroying and loading new!");
         }
 
-        gameCore = new GameCore(this, BedWarsCommand.COMMAND_NAME, Permissions.ADMIN_COMMAND, mainConfig.getBoolean(MainConfig.ConfigPaths.VERBOSE));
+        gameCore = new GameCore(this, language, BedWarsCommand.COMMAND_NAME,
+                Permissions.ADMIN_COMMAND, mainConfig.getBoolean(MainConfig.ConfigPaths.VERBOSE));
         gameCore.setVisualsConfig(visualsConfig);
 
         try {
@@ -121,7 +122,6 @@ public class Main extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        //TODO: use paper's getServer().isStopping(); to see if we are reloading
         gameCore.destroy();
         commands.destroy();
     }
@@ -161,6 +161,8 @@ public class Main extends JavaPlugin {
                 GameConfig.DefaultKeys.STORES_ENABLED, true, GameValue.DEFAULT));
 
         //Loaded from config
+        gameConfig.registerValue(GameConfig.ValueHolder.get(
+                GameConfig.DefaultKeys.SPECTATORS_ENABLED, mainConfig.getBoolean(MainConfig.ConfigPaths.GAME_DEFAULT_SPECTATORS_ENABLED), GameValue.SHARED));
         gameConfig.registerValue(GameConfig.ValueHolder.get(
                 GameConfig.DefaultKeys.START_TIME, mainConfig.getInt(MainConfig.ConfigPaths.GAME_DEFAULT_START_TIME), GameValue.SHARED));
         gameConfig.registerValue(GameConfig.ValueHolder.get(

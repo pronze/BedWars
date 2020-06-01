@@ -43,7 +43,7 @@ public class JoinCommand implements ScreamingCommand {
                             return;
                         }
 
-                        gamePlayer.join(game.get());
+                        gamePlayer.joinGame(game.get());
                         return;
                     }
 
@@ -53,7 +53,7 @@ public class JoinCommand implements ScreamingCommand {
                                 .send(player);
                         return;
                     }
-                    gamePlayer.join(game.get());
+                    gamePlayer.joinGame(game.get());
                 });
     }
 }

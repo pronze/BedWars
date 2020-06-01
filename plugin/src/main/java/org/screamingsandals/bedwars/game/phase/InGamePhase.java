@@ -19,6 +19,10 @@ public class InGamePhase extends GamePhase {
     @Override
     public void tick() {
         super.tick();
+
+        if (gameFrame.getPlayersInGame().size() < gameFrame.getMinPlayers()) {
+            //TODO: destroy
+        }
     }
 
     @Override

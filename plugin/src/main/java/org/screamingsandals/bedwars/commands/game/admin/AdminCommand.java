@@ -135,15 +135,25 @@ public class AdminCommand implements ScreamingCommand {
                 available.add("edit");
             }
 
-            //TODO: edit this to be more good while we have multiple games
-            //list.of(stop, start, maintenance) if no game is in edit mode
+           if (gameManager.isGameRegistered(gameName)) {
+               final var registeredGame = gameManager.getRegisteredGame(gameName);
+               if (registeredGame.isEmpty()) {
+                   return toReturn;
+               }
+
+               final var game = registeredGame.get();
+               if (game.isRunning()) {
+                   available.add("stop");
+               } else {
+                   available.add("start");
+               }
+           }
 
             for (String found : available) {
                 if (found.startsWith(typed)) {
                     toReturn.add(found);
                 }
             }
-
             return toReturn;
         }
 
@@ -187,7 +197,6 @@ public class AdminCommand implements ScreamingCommand {
 
         final var gameBuilder = new GameBuilder();
         gameBuilder.create(gameName, player);
-
         gameManager.registerBuilder(gameBuilder.getGameFrame().getUuid(), gameBuilder);
     }
 
@@ -228,6 +237,7 @@ public class AdminCommand implements ScreamingCommand {
                 }
                 break;
             }
+
             case "set": {
                 switch (whatToDo) {
                     case "border": {
@@ -246,6 +256,7 @@ public class AdminCommand implements ScreamingCommand {
                 }
                 break;
             }
+
             default:
                 mpr("general.errors.unknown-parameter")
                         .game(currentGame)
@@ -314,7 +325,6 @@ public class AdminCommand implements ScreamingCommand {
             case "spawn":
                 return setActions.get(ActionType.Set.SPAWN).handleTab(gameBuilder, player, subList);
         }
-
         return toReturn;
     }
 
@@ -350,8 +360,9 @@ public class AdminCommand implements ScreamingCommand {
             mpr("commands.admin.actions.edit.running").send(player);
             if (gameFrame.getActiveState() == GameState.MAINTENANCE) {
                 gameFrame.stopMaintenance();
+            } else {
+                gameFrame.stop();
             }
-            gameFrame.stop();
             mpr("commands.admin.actions.edit.stopped").send(player);
         }
 
@@ -361,7 +372,7 @@ public class AdminCommand implements ScreamingCommand {
 
         final var builder = new GameBuilder();
         builder.load((Game) gameFrame, player);
-        gameManager.registerBuilder(gameFrame.getUuid(),builder);
+        gameManager.registerBuilder(gameFrame.getUuid(), builder);
     }
 
     private boolean checkPermissions(Player player, String permission) {

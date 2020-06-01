@@ -28,6 +28,8 @@ public class MainConfig extends SpigotConfigAdapter {
                 .put(ConfigPaths.BUNGEE_MULTI_GAME_MODE, false)
                 .put(ConfigPaths.BUNGEE_LOBBY_SERVER, "your_hub_server_name_here")
                 .put(ConfigPaths.BUNGEE_RESTART_ON_GAME_END, false)
+                .put(ConfigPaths.BUNGEE_REGENERATE_ON_GAME_END, true)
+                .put(ConfigPaths.GAME_DEFAULT_SPECTATORS_ENABLED, true)
                 .put(ConfigPaths.GAME_DEFAULT_START_TIME, 15)
                 .put(ConfigPaths.GAME_DEFAULT_GAME_TIME, 3600)
                 .put(ConfigPaths.GAME_DEFAULT_DEATHMATCH_TIME, 600)
@@ -45,11 +47,13 @@ public class MainConfig extends SpigotConfigAdapter {
         String BUNGEE_ENABLED = "bungeecord.enabled";
         String BUNGEE_MULTI_GAME_MODE = "bungeecord.multi-game-mode";
         String BUNGEE_LOBBY_SERVER = "bungeecord.lobby-server-name";
+        String BUNGEE_REGENERATE_ON_GAME_END = "bungeecord.regenerate-map-after-game-end";
         String BUNGEE_RESTART_ON_GAME_END = "bungeecord.restart-server-after-game-end";
 
-        String GAME_DEFAULT_START_TIME = "game.times.starting-time";
-        String GAME_DEFAULT_GAME_TIME = "game.times.game-time";
-        String GAME_DEFAULT_DEATHMATCH_TIME = "game.times.deathmatch-time";
-        String GAME_DEFAULT_END_TIME = "game.times.ending-time";
+        String GAME_DEFAULT_SPECTATORS_ENABLED = "game.defaults.enabled.spectators";
+        String GAME_DEFAULT_START_TIME = "game.defaults.time.starting";
+        String GAME_DEFAULT_GAME_TIME = "game.defaults.time.game";
+        String GAME_DEFAULT_DEATHMATCH_TIME = "game.defaults.time.deathmatch";
+        String GAME_DEFAULT_END_TIME = "game.defaults.time.ending";
     }
 }

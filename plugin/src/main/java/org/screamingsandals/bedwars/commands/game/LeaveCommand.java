@@ -33,7 +33,7 @@ public class LeaveCommand implements ScreamingCommand {
                         return;
                     }
 
-                    gamePlayer.leave();
+                    gamePlayer.leaveGame();
                 });
     }
 }
