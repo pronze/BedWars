@@ -32,17 +32,20 @@ public class GameBuilder extends org.screamingsandals.lib.gamecore.core.GameBuil
 
         if (gameFrame.checkIntegrity(true)) {
             final var gameManager = Main.getGameManager();
-            gameManager.saveGame(gameFrame);
-            gameManager.registerGame(gameFrame.getUuid(), gameFrame);
-
             final var uuid = gameFrame.getUuid();
+
             GameCore.getEntityManager().unregisterAll(uuid);
             GameCore.getHologramManager().destroyAll(uuid);
 
             GameCore.unregisterListener(storeListener);
             storeListener = null;
 
-            player.sendMessage("Saved");
+            gameManager.saveGame(gameFrame);
+            gameManager.registerGame(gameFrame.getUuid(), gameFrame);
+
+            mpr("commands.admin.actions.save.done")
+                    .game(gameFrame)
+                    .send(player);
         } else {
             checkWhatsWrong(player);
         }

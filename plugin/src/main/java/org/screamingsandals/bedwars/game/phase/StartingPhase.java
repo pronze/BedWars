@@ -40,6 +40,7 @@ public class StartingPhase extends GamePhase {
         }
 
         if (countRemainingTime() == 0) {
+            gameFrame.moveAllToTeamSpawns();
             gameFrame.setActiveState(GameState.IN_GAME);
         }
     }

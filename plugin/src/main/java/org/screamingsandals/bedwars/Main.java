@@ -18,7 +18,7 @@ import org.screamingsandals.lib.gamecore.GameCore;
 import org.screamingsandals.lib.gamecore.core.GameManager;
 import org.screamingsandals.lib.gamecore.core.config.GameConfig;
 import org.screamingsandals.lib.gamecore.core.config.GameValue;
-import org.screamingsandals.lib.gamecore.core.cycle.GameCycleType;
+import org.screamingsandals.lib.gamecore.core.cycle.CycleType;
 import org.screamingsandals.lib.gamecore.exceptions.GameCoreException;
 import org.screamingsandals.lib.gamecore.language.GameLanguage;
 
@@ -141,14 +141,14 @@ public class Main extends JavaPlugin {
         return file;
     }
 
-    private GameCycleType getGameType() {
+    private CycleType getGameType() {
         if (bungee) {
             if (mainConfig.getBoolean(MainConfig.ConfigPaths.BUNGEE_MULTI_GAME_MODE)) {
-                return GameCycleType.MULTI_GAME_BUNGEE;
+                return CycleType.MULTI_GAME_BUNGEE;
             }
-            return GameCycleType.SINGLE_GAME_BUNGEE;
+            return CycleType.SINGLE_GAME_BUNGEE;
         } else {
-            return GameCycleType.MULTI_GAME;
+            return CycleType.MULTI_GAME;
         }
     }
 

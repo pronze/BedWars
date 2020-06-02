@@ -123,15 +123,21 @@ public class AdminCommand implements ScreamingCommand {
             final var typed = args.get(2);
             final List<String> available = new ArrayList<>(List.of("add", "set"));
 
-            if (!gameManager.isInBuilder(gameName) && !gameManager.isGameRegistered(gameName)) {
+            if (!gameManager.isInBuilder(gameName)
+                    && !gameManager.isGameRegistered(gameName)
+                    && checkPermissions(player, Permissions.ADMIN_COMMAND_ACTION_CREATE)) {
                 available.add("create");
             }
 
-            if (gameManager.isInBuilder(gameName) && gameManager.getGameBuilder(gameName).isReadyToSave(false)) {
+
+            if (gameManager.isInBuilder(gameName)
+                    && gameManager.getGameBuilder(gameName).isReadyToSave(false)
+                    && checkPermissions(player, Permissions.ADMIN_COMMAND_ACTION_SAVE)) {
                 available.add("save");
             }
 
-            if (gameManager.isGameRegistered(gameName)) {
+            if (gameManager.isGameRegistered(gameName)
+                    && checkPermissions(player, Permissions.ADMIN_COMMAND_ACTION_EDIT)) {
                 available.add("edit");
             }
 
@@ -142,14 +148,15 @@ public class AdminCommand implements ScreamingCommand {
                }
 
                final var game = registeredGame.get();
-               if (game.isRunning()) {
+               if (game.isRunning()
+                       && checkPermissions(player, Permissions.ADMIN_COMMAND_GAME_STOP)) {
                    available.add("stop");
-               } else {
+               } else if (checkPermissions(player, Permissions.ADMIN_COMMAND_GAME_START)) {
                    available.add("start");
                }
            }
 
-            for (String found : available) {
+            for (var found : available) {
                 if (found.startsWith(typed)) {
                     toReturn.add(found);
                 }

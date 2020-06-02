@@ -1,6 +1,7 @@
 package org.screamingsandals.bedwars.game.phase;
 
 import org.screamingsandals.lib.gamecore.core.GameFrame;
+import org.screamingsandals.lib.gamecore.core.GameState;
 import org.screamingsandals.lib.gamecore.core.cycle.GameCycle;
 import org.screamingsandals.lib.gamecore.core.phase.GamePhase;
 
@@ -21,7 +22,9 @@ public class InGamePhase extends GamePhase {
         super.tick();
 
         if (gameFrame.getPlayersInGame().size() < gameFrame.getMinPlayers()) {
-            //TODO: destroy
+            gameCycle.kickAllPlayers();
+
+            gameFrame.setActiveState(GameState.RESTART);
         }
     }
 

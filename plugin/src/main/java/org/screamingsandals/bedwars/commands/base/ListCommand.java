@@ -13,14 +13,14 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import static org.screamingsandals.lib.lang.I.mpr;
+import static org.screamingsandals.lib.gamecore.language.GameLanguage.mpr;
 
 @RegisterCommand(subCommand = true)
 public class ListCommand implements ScreamingCommand {
 
     @Override
     public void register() {
-        SubCommandBuilder.bukkitSubCommand().createSubCommand(BedWarsCommand.COMMAND_NAME, "list", Permissions.BASE_LIST_COMMAND, Collections.emptyList())
+        SubCommandBuilder.bukkitSubCommand().createSubCommand(BedWarsCommand.COMMAND_NAME, "list", Permissions.BASE_COMMAND_LIST, Collections.emptyList())
                 .handleSubPlayerCommand(this::handle)
                 .handleSubConsoleCommand(this::handle);
     }
@@ -30,20 +30,26 @@ public class ListCommand implements ScreamingCommand {
         final Collection<String> names = gameManager.getRegisteredGamesNames();
         final int size = names.size();
         if (size > 0) {
-            mpr("commands.base.list.arenas_list_header")
+            mpr("commands.base.list.arenas-list-header")
                     .replace("%count%", size)
                     .send(commandSender);
             names.forEach(name -> {
-                final var game = gameManager.getRegisteredGame(name);
-                if (game.isEmpty()) {
+                final var registeredGame = gameManager.getRegisteredGame(name);
+                if (registeredGame.isEmpty()) {
                     return;
                 }
 
-                mpr("commands.base.list.arenas_list_text")
-                        .replace("%game_name%", name)
-                        .replace("%game_state%", GameUtils.getTranslatedGameState(game.get().getActiveState()))
+                final var game = registeredGame.get();
+
+                mpr("commands.base.list.arenas-list-text")
+                        .game(game)
+                        .replace("%gameState%", GameUtils.getTranslatedGameState(game.getActiveState()))
                         .send(commandSender);
             });
+
+            mpr("commands.base.list.arenas-list-footer")
+                    .send(commandSender);
+
         } else {
             mpr("commands.base.list.no_arenas_found").send(commandSender);
         }
