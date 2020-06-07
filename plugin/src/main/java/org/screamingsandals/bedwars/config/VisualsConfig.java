@@ -17,13 +17,20 @@ public class VisualsConfig extends org.screamingsandals.lib.gamecore.config.Visu
     }
 
     public void loadDefaults() {
-        //Alot of this will be moved to language file!
         DefaultConfigBuilder.start(this)
                 .put(PATH_SCOREBOARDS_ENABLED, true)
                 .put(PATH_SCOREBOARDS_NAME, "%prefix%")
                 .put(PATH_SCOREBOARDS_CUSTOM_ENABLED, false)
 
                 .put(PATH_BOSSBARS_ENABLED, true)
+                .put(PATH_BOSSBARS_CUSTOM_ENABLED, false)
+                .put(PATH_BOSSBARS_CONTENT_LOBBY, "Waiting for dem players!")
+                .put(PATH_BOSSBARS_CONTENT_STARTING, "Here we go!")
+                .put(PATH_BOSSBARS_CONTENT_IN_GAME, "RUNNINNGGGG")
+                .put(PATH_BOSSBARS_CONTENT_DEATHMATCH, "YELLOW")
+                .put(PATH_BOSSBARS_CONTENT_END_GAME, "YELLOW")
+                .put(PATH_BOSSBARS_COLOR_END_GAME, "YELLOW")
+
                 .put(PATH_BOSSBARS_COLOR_LOBBY, "YELLOW")
                 .put(PATH_BOSSBARS_COLOR_STARTING, "YELLOW")
                 .put(PATH_BOSSBARS_COLOR_IN_GAME, "YELLOW")

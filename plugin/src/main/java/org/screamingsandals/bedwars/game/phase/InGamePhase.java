@@ -6,7 +6,6 @@ import org.screamingsandals.lib.gamecore.core.cycle.GameCycle;
 import org.screamingsandals.lib.gamecore.core.phase.GamePhase;
 
 public class InGamePhase extends GamePhase {
-    private int remainingTime;
 
     public InGamePhase(GameCycle gameCycle, int runTime) {
         super(gameCycle, runTime);
@@ -14,18 +13,23 @@ public class InGamePhase extends GamePhase {
 
     @Override
     public void prepare(GameFrame gameFrame) {
-        updateRemainingTime(runTime);
+        updateRemainingTime(countRemainingTime());
+    }
+
+    @Override
+    public boolean preTick() {
+        if (gameFrame.getPlayersInGame().size() < gameFrame.getMinPlayers()) {
+            gameCycle.kickAllPlayers();
+
+            gameCycle.switchPhase(GameState.RESTART);
+            return true;
+        }
+        return true;
     }
 
     @Override
     public void tick() {
         super.tick();
-
-        if (gameFrame.getPlayersInGame().size() < gameFrame.getMinPlayers()) {
-            gameCycle.kickAllPlayers();
-
-            gameFrame.setActiveState(GameState.RESTART);
-        }
     }
 
     @Override

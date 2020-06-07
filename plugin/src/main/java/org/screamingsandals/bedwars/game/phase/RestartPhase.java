@@ -17,10 +17,15 @@ public class RestartPhase extends GamePhase {
     }
 
     @Override
-    public void tick() {
-        super.tick();
-
+    public boolean preTick() {
         gameFrame.getGameWorld().regenerate();
-        gameFrame.setActiveState(GameState.WAITING);
+        return true;
+    }
+
+    @Override
+    public void tick() {
+
+        gameCycle.switchPhase(GameState.WAITING);
+        super.tick();
     }
 }

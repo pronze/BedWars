@@ -55,6 +55,14 @@ public class AdminCommand implements ScreamingCommand {
         final var action = args.get(2).toLowerCase();
         final List<String> subList = args.subList(2, argsSize);
 
+        if (action.equals("start")) {
+            return;
+        }
+
+        if (action.equals("stop")) {
+            return;
+        }
+
         GameBuilder gameBuilder = null;
         if (!action.equals("create")
                 && !action.equals("edit")) {

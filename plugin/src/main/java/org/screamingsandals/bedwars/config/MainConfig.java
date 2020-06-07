@@ -30,30 +30,12 @@ public class MainConfig extends SpigotConfigAdapter {
                 .put(ConfigPaths.BUNGEE_RESTART_ON_GAME_END, false)
                 .put(ConfigPaths.BUNGEE_REGENERATE_ON_GAME_END, true)
                 .put(ConfigPaths.GAME_DEFAULT_SPECTATORS_ENABLED, true)
-                .put(ConfigPaths.GAME_DEFAULT_START_TIME, 15)
+                .put(ConfigPaths.GAME_DEFAULT_START_TIME, 30)
                 .put(ConfigPaths.GAME_DEFAULT_GAME_TIME, 3600)
                 .put(ConfigPaths.GAME_DEFAULT_DEATHMATCH_TIME, 600)
                 .put(ConfigPaths.GAME_DEFAULT_END_TIME, 5)
+                .put(ConfigPaths.GAME_MECHANICS_AUTO_START_ENABLED, true)
+                .put(ConfigPaths.GAME_MECHANICS_AUTO_START_SORT_PLAYERS_TO_TEAMS, true)
                 .end();
-    }
-
-    public interface ConfigPaths {
-        String DEBUG = "debug";
-        String PREFIX = "prefix";
-        String LANG = "language";
-        String VERBOSE = "verbose-to-admins";
-        String GROOVY = "use-groovy-for-shops";
-
-        String BUNGEE_ENABLED = "bungeecord.enabled";
-        String BUNGEE_MULTI_GAME_MODE = "bungeecord.multi-game-mode";
-        String BUNGEE_LOBBY_SERVER = "bungeecord.lobby-server-name";
-        String BUNGEE_REGENERATE_ON_GAME_END = "bungeecord.regenerate-map-after-game-end";
-        String BUNGEE_RESTART_ON_GAME_END = "bungeecord.restart-server-after-game-end";
-
-        String GAME_DEFAULT_SPECTATORS_ENABLED = "game.defaults.enabled.spectators";
-        String GAME_DEFAULT_START_TIME = "game.defaults.time.starting";
-        String GAME_DEFAULT_GAME_TIME = "game.defaults.time.game";
-        String GAME_DEFAULT_DEATHMATCH_TIME = "game.defaults.time.deathmatch";
-        String GAME_DEFAULT_END_TIME = "game.defaults.time.ending";
     }
 }

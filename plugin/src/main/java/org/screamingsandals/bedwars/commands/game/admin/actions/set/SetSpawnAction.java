@@ -71,7 +71,7 @@ public class SetSpawnAction implements Action {
                 return;
             }
 
-            team.get().setSpawnLocation(new LocationAdapter(location));
+            team.get().setSpawn(new LocationAdapter(location));
             mpr("commands.admin.actions.set.spawn.done")
                     .replace("%type%", type)
                     .send(player);

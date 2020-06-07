@@ -7,6 +7,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.screamingsandals.bedwars.api.Permissions;
 import org.screamingsandals.bedwars.commands.BedWarsCommand;
 import org.screamingsandals.bedwars.commands.CommandsLanguage;
+import org.screamingsandals.bedwars.config.ConfigPaths;
 import org.screamingsandals.bedwars.config.MainConfig;
 import org.screamingsandals.bedwars.config.VisualsConfig;
 import org.screamingsandals.bedwars.game.Game;
@@ -51,7 +52,7 @@ public class Main extends JavaPlugin {
         try {
             mainConfig = new MainConfig(ConfigAdapter.createFile(getDataFolder(), "config.yml"));
             mainConfig.load();
-            bungee = mainConfig.getBoolean(MainConfig.ConfigPaths.BUNGEE_ENABLED);
+            bungee = mainConfig.getBoolean(ConfigPaths.BUNGEE_ENABLED);
 
             visualsConfig = new VisualsConfig(ConfigAdapter.createFile(getDataFolder(), "visuals.yml"));
             visualsConfig.load();
@@ -59,7 +60,7 @@ public class Main extends JavaPlugin {
             var shopFileName = "shop.yml";
             var upgradesFileName = "upgrades.yml";
 
-            if (mainConfig.getBoolean(MainConfig.ConfigPaths.GROOVY)) {
+            if (mainConfig.getBoolean(ConfigPaths.GROOVY)) {
                 shopFileName = "shop.groovy";
                 upgradesFileName = "upgrades.groovy";
             }
@@ -88,7 +89,7 @@ public class Main extends JavaPlugin {
         }
 
         gameCore = new GameCore(this, language, BedWarsCommand.COMMAND_NAME,
-                Permissions.ADMIN_COMMAND, mainConfig.getBoolean(MainConfig.ConfigPaths.VERBOSE));
+                Permissions.ADMIN_COMMAND, mainConfig.getBoolean(ConfigPaths.VERBOSE));
         gameCore.setVisualsConfig(visualsConfig);
 
         try {
@@ -112,12 +113,11 @@ public class Main extends JavaPlugin {
         final Collection<Player> onlinePlayers = (Collection<Player>) Bukkit.getOnlinePlayers();
         if (onlinePlayers.size() > 0) {
             onlinePlayers.forEach(player -> GameCore.getPlayerManager().registerPlayer(player));
-            System.out.println(GameCore.getPlayerManager().getRegisteredPlayers());
         }
 
         registerListeners();
 
-        Debug.info("&e------------ &aEverything is loaded! :) &e------------");
+        Debug.info("&e------------ &aEverything is loaded! :) &e------------", true);
     }
 
     @Override
@@ -143,7 +143,7 @@ public class Main extends JavaPlugin {
 
     private CycleType getGameType() {
         if (bungee) {
-            if (mainConfig.getBoolean(MainConfig.ConfigPaths.BUNGEE_MULTI_GAME_MODE)) {
+            if (mainConfig.getBoolean(ConfigPaths.BUNGEE_MULTI_GAME_MODE)) {
                 return CycleType.MULTI_GAME_BUNGEE;
             }
             return CycleType.SINGLE_GAME_BUNGEE;
@@ -162,15 +162,15 @@ public class Main extends JavaPlugin {
 
         //Loaded from config
         gameConfig.registerValue(GameConfig.ValueHolder.get(
-                GameConfig.DefaultKeys.SPECTATORS_ENABLED, mainConfig.getBoolean(MainConfig.ConfigPaths.GAME_DEFAULT_SPECTATORS_ENABLED), GameValue.SHARED));
+                GameConfig.DefaultKeys.SPECTATORS_ENABLED, mainConfig.getBoolean(ConfigPaths.GAME_DEFAULT_SPECTATORS_ENABLED), GameValue.SHARED));
         gameConfig.registerValue(GameConfig.ValueHolder.get(
-                GameConfig.DefaultKeys.START_TIME, mainConfig.getInt(MainConfig.ConfigPaths.GAME_DEFAULT_START_TIME), GameValue.SHARED));
+                GameConfig.DefaultKeys.START_TIME, mainConfig.getInt(ConfigPaths.GAME_DEFAULT_START_TIME), GameValue.SHARED));
         gameConfig.registerValue(GameConfig.ValueHolder.get(
-                GameConfig.DefaultKeys.GAME_TIME, mainConfig.getInt(MainConfig.ConfigPaths.GAME_DEFAULT_GAME_TIME), GameValue.SHARED));
+                GameConfig.DefaultKeys.GAME_TIME, mainConfig.getInt(ConfigPaths.GAME_DEFAULT_GAME_TIME), GameValue.SHARED));
         gameConfig.registerValue(GameConfig.ValueHolder.get(
-                GameConfig.DefaultKeys.DEATHMATCH_TIME, mainConfig.getInt(MainConfig.ConfigPaths.GAME_DEFAULT_DEATHMATCH_TIME), GameValue.SHARED));
+                GameConfig.DefaultKeys.DEATHMATCH_TIME, mainConfig.getInt(ConfigPaths.GAME_DEFAULT_DEATHMATCH_TIME), GameValue.SHARED));
         gameConfig.registerValue(GameConfig.ValueHolder.get(
-                GameConfig.DefaultKeys.END_GAME_TIME, mainConfig.getInt(MainConfig.ConfigPaths.GAME_DEFAULT_END_TIME), GameValue.SHARED));
+                GameConfig.DefaultKeys.END_GAME_TIME, mainConfig.getInt(ConfigPaths.GAME_DEFAULT_END_TIME), GameValue.SHARED));
     }
 
     public static Main getInstance() {

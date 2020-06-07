@@ -11,7 +11,7 @@ import org.screamingsandals.lib.commands.common.interfaces.ScreamingCommand;
 import java.util.Collections;
 import java.util.List;
 
-@RegisterCommand
+@RegisterCommand(subCommand = true)
 public class DebugPasteCommand implements ScreamingCommand {
 
     @Override

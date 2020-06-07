@@ -5,6 +5,7 @@ import org.bukkit.event.Listener;
 import org.screamingsandals.lib.gamecore.events.player.SPlayerPreRegisterEvent;
 import org.screamingsandals.lib.gamecore.events.player.SPlayerRegisteredEvent;
 import org.screamingsandals.lib.gamecore.events.player.SPlayerUnregisteredEvent;
+import org.screamingsandals.lib.gamecore.events.player.damage.SPlayerDamagedPlayerEvent;
 
 public class PlayerCoreListener implements Listener {
 
@@ -22,5 +23,10 @@ public class PlayerCoreListener implements Listener {
     @EventHandler
     public void onUnregister(SPlayerUnregisteredEvent event) {
         System.out.println("Player unregistered!");
+    }
+
+    @EventHandler
+    public void onPlayerDamage(SPlayerDamagedPlayerEvent event) {
+
     }
 }

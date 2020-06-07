@@ -14,35 +14,30 @@ public class StartingPhase extends GamePhase {
     @Override
     public void prepare(GameFrame gameFrame) {
         gameFrame.getPlaceholderParser().add("%timeToStart%", runTime);
-        System.out.println(runTime);
+    }
+
+    @Override
+    public boolean preTick() {
+        final var playersInGame = gameFrame.getPlayersInGame();
+        final var playersInGameCount = playersInGame.size();
+
+        if (playersInGameCount < gameFrame.getMinPlayers()) {
+            gameCycle.switchPhase(GameState.WAITING);
+            reset();
+            return true;
+        }
+
+        if (countRemainingTime() == 0) {
+            gameFrame.moveAllToTeamSpawns();
+            gameCycle.switchPhase(GameState.IN_GAME);
+        }
+
+        return true;
     }
 
     @Override
     public void tick() {
         super.tick();
-
-        final var scoreboardManager = gameFrame.getScoreboardManager();
-        final var playersInGame = gameFrame.getPlayersInGame();
-        final var playersInGameCount = playersInGame.size();
-
-        if (playersInGameCount < gameFrame.getMinPlayers()) {
-            gameFrame.setActiveState(GameState.WAITING);
-
-            scoreboardManager.hideAll();
-            playersInGame.forEach(gamePlayer -> scoreboardManager.show(gamePlayer, GameState.WAITING));
-            reset();
-            return;
-        }
-
-        if (firstTick) {
-            scoreboardManager.hideAll();
-            playersInGame.forEach(gamePlayer -> scoreboardManager.show(gamePlayer, GameState.PRE_GAME_COUNTDOWN));
-        }
-
-        if (countRemainingTime() == 0) {
-            gameFrame.moveAllToTeamSpawns();
-            gameFrame.setActiveState(GameState.IN_GAME);
-        }
     }
 
     @Override
