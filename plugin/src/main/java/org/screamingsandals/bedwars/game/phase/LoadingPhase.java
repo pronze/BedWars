@@ -7,7 +7,7 @@ import org.screamingsandals.lib.gamecore.core.phase.GamePhase;
 
 public class LoadingPhase extends GamePhase {
 
-    //One tick long phase
+    //One tick-long phase
     public LoadingPhase(GameCycle gameCycle) {
         super(gameCycle);
         oneTick = true;
@@ -15,7 +15,7 @@ public class LoadingPhase extends GamePhase {
 
     @Override
     public void prepare(GameFrame gameFrame) {
-        getGameFrame().setActiveState(GameState.WAITING);
+        getGameFrame().switchState(GameState.WAITING);
     }
 
     @Override

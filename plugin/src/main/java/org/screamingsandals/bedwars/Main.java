@@ -14,11 +14,14 @@ import org.screamingsandals.bedwars.game.Game;
 import org.screamingsandals.bedwars.listeners.PlayerCoreListener;
 import org.screamingsandals.lib.commands.Commands;
 import org.screamingsandals.lib.config.ConfigAdapter;
+import org.screamingsandals.lib.config.custom.ScreamingConfig;
+import org.screamingsandals.lib.config.custom.ValueHolder;
+import org.screamingsandals.lib.config.custom.ValueType;
 import org.screamingsandals.lib.debug.Debug;
 import org.screamingsandals.lib.gamecore.GameCore;
+import org.screamingsandals.lib.gamecore.config.CoreConfig;
+import org.screamingsandals.lib.gamecore.config.GameConfig;
 import org.screamingsandals.lib.gamecore.core.GameManager;
-import org.screamingsandals.lib.gamecore.core.config.GameConfig;
-import org.screamingsandals.lib.gamecore.core.config.GameValue;
 import org.screamingsandals.lib.gamecore.core.cycle.CycleType;
 import org.screamingsandals.lib.gamecore.exceptions.GameCoreException;
 import org.screamingsandals.lib.gamecore.language.GameLanguage;
@@ -31,6 +34,8 @@ public class Main extends JavaPlugin {
     private MainConfig mainConfig;
     private VisualsConfig visualsConfig;
     @Getter
+    private ScreamingConfig coreConfig;
+    @Getter
     private GameCore gameCore;
     private GameManager<Game> gameManager;
     @Getter
@@ -41,7 +46,6 @@ public class Main extends JavaPlugin {
     private File shopFile;
     @Getter
     private File upgradesFile;
-    @Getter
     private boolean bungee;
 
     @Override
@@ -68,6 +72,8 @@ public class Main extends JavaPlugin {
             shopFile = checkIfExistsOrCopyDefault(getDataFolder(), shopFileName);
             upgradesFile = checkIfExistsOrCopyDefault(getDataFolder(), upgradesFileName);
 
+            coreConfig = new GameConfig();
+            loadCoreConfig();
         } catch (Exception e) {
             e.printStackTrace();
             return;
@@ -88,8 +94,7 @@ public class Main extends JavaPlugin {
             Debug.info("GameCore already exists, destroying and loading new!");
         }
 
-        gameCore = new GameCore(this, language, BedWarsCommand.COMMAND_NAME,
-                Permissions.ADMIN_COMMAND, mainConfig.getBoolean(ConfigPaths.VERBOSE));
+        gameCore = new GameCore(this, language, coreConfig);
         gameCore.setVisualsConfig(visualsConfig);
 
         try {
@@ -155,22 +160,28 @@ public class Main extends JavaPlugin {
     private void loadDefaultConfigForGames() {
         final var gameConfig = gameManager.getGameConfig();
         //Not configurable by user
-        gameConfig.registerValue(GameConfig.ValueHolder.get(
-                GameConfig.DefaultKeys.TEAMS_ENABLED, true, GameValue.DEFAULT));
-        gameConfig.registerValue(GameConfig.ValueHolder.get(
-                GameConfig.DefaultKeys.STORES_ENABLED, true, GameValue.DEFAULT));
+        gameConfig.registerValue(ValueHolder.builder(
+                GameConfig.DefaultKeys.TEAMS_ENABLED, true, ValueType.UNDEFINED));
+        gameConfig.registerValue(ValueHolder.builder(
+                GameConfig.DefaultKeys.STORES_ENABLED, true, ValueType.UNDEFINED));
 
         //Loaded from config
-        gameConfig.registerValue(GameConfig.ValueHolder.get(
-                GameConfig.DefaultKeys.SPECTATORS_ENABLED, mainConfig.getBoolean(ConfigPaths.GAME_DEFAULT_SPECTATORS_ENABLED), GameValue.SHARED));
-        gameConfig.registerValue(GameConfig.ValueHolder.get(
-                GameConfig.DefaultKeys.START_TIME, mainConfig.getInt(ConfigPaths.GAME_DEFAULT_START_TIME), GameValue.SHARED));
-        gameConfig.registerValue(GameConfig.ValueHolder.get(
-                GameConfig.DefaultKeys.GAME_TIME, mainConfig.getInt(ConfigPaths.GAME_DEFAULT_GAME_TIME), GameValue.SHARED));
-        gameConfig.registerValue(GameConfig.ValueHolder.get(
-                GameConfig.DefaultKeys.DEATHMATCH_TIME, mainConfig.getInt(ConfigPaths.GAME_DEFAULT_DEATHMATCH_TIME), GameValue.SHARED));
-        gameConfig.registerValue(GameConfig.ValueHolder.get(
-                GameConfig.DefaultKeys.END_GAME_TIME, mainConfig.getInt(ConfigPaths.GAME_DEFAULT_END_TIME), GameValue.SHARED));
+        gameConfig.registerValue(ValueHolder.builder(
+                GameConfig.DefaultKeys.SPECTATORS_ENABLED, mainConfig.getBoolean(ConfigPaths.GAME_DEFAULT_SPECTATORS_ENABLED), ValueType.SHARED));
+        gameConfig.registerValue(ValueHolder.builder(
+                GameConfig.DefaultKeys.START_TIME, mainConfig.getInt(ConfigPaths.GAME_DEFAULT_START_TIME), ValueType.SHARED));
+        gameConfig.registerValue(ValueHolder.builder(
+                GameConfig.DefaultKeys.GAME_TIME, mainConfig.getInt(ConfigPaths.GAME_DEFAULT_GAME_TIME), ValueType.SHARED));
+        gameConfig.registerValue(ValueHolder.builder(
+                GameConfig.DefaultKeys.DEATHMATCH_TIME, mainConfig.getInt(ConfigPaths.GAME_DEFAULT_DEATHMATCH_TIME), ValueType.SHARED));
+        gameConfig.registerValue(ValueHolder.builder(
+                GameConfig.DefaultKeys.END_GAME_TIME, mainConfig.getInt(ConfigPaths.GAME_DEFAULT_END_TIME), ValueType.SHARED));
+    }
+
+    private void loadCoreConfig() {
+        coreConfig.registerValue(ValueHolder.builder(CoreConfig.DefaultKeys.VERBOSE, mainConfig.getBoolean(ConfigPaths.VERBOSE)));
+        coreConfig.registerValue(ValueHolder.builder(CoreConfig.DefaultKeys.ADMIN_PERMISSIONS, Permissions.ADMIN));
+        coreConfig.registerValue(ValueHolder.builder(CoreConfig.DefaultKeys.MAIN_COMMAND_NAME, BedWarsCommand.COMMAND_NAME));
     }
 
     public static Main getInstance() {
@@ -187,5 +198,9 @@ public class Main extends JavaPlugin {
 
     public static VisualsConfig getVisualsConfig() {
         return instance.visualsConfig;
+    }
+
+    public static boolean isBungee() {
+        return instance.bungee;
     }
 }

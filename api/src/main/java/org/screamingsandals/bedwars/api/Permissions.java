@@ -5,6 +5,7 @@ public interface Permissions {
     String BASE_COMMAND_LIST = "sbw.command.base.list";
     String BASE_COMMAND_VERSION = "sbw.command.base.version";
     String BASE_COMMAND_DEBUG_PASTE = "sbw.command.base.debugpaste";
+    String ADMIN = "sbw.admin";
     String ADMIN_COMMAND = "sbw.command.admin";
     String ADMIN_COMMAND_ACTION_ADD = "sbw.command.admin.action.add";
     String ADMIN_COMMAND_ACTION_SET = "sbw.command.admin.action.set";
