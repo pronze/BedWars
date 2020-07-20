@@ -65,6 +65,10 @@ public abstract class BaseCommand {
         }
 
         for (String permission : permissions) {
+            if (permission == null) {
+                return true;
+            }
+
             if (sender.isPermissionSet(permission)) {
                 return sender.hasPermission(permission);
             }
