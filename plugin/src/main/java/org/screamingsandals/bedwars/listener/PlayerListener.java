@@ -5,7 +5,6 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
-import org.bukkit.block.data.type.Cake;
 import org.bukkit.entity.*;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
@@ -264,6 +263,10 @@ public class PlayerListener implements Listener {
                 event.setRespawnLocation(gPlayer.getGame().getLobbySpawn());
                 return;
             }
+            // clear inventory to fix issue 148
+            if (!game.getOriginalOrInheritedKeepInventory()) {
+                event.getPlayer().getInventory().clear();
+            }
             if (gPlayer.isSpectator) {
                 if (team == null) {
                     event.setRespawnLocation(gPlayer.getGame().makeSpectator(gPlayer, true));
@@ -327,32 +330,6 @@ public class PlayerListener implements Listener {
             if (!game.blockPlace(Main.getPlayerGameProfile(event.getPlayer()), event.getBlock(),
                     event.getBlockReplacedState(), event.getItemInHand())) {
                 event.setCancelled(true);
-            }
-
-            if (game.getStatus() == GameStatus.RUNNING
-                    && GameCreator.isInArea(event.getBlock().getLocation(), game.getPos1(), game.getPos2())) {
-                Block block = event.getBlock();
-                int explosionTime = Main.getConfigurator().config.getInt("tnt.explosion-time", 8) * 20;
-
-                if (block.getType() == Material.TNT
-                        && Main.getConfigurator().config.getBoolean("tnt.auto-ignite", false)) {
-                    block.setType(Material.AIR);
-                    Location location = block.getLocation().add(0.5, 0.5, 0.5);
-                    ;
-
-                    TNTPrimed tnt = (TNTPrimed) location.getWorld().spawnEntity(location, EntityType.PRIMED_TNT);
-                    tnt.setFuseTicks(explosionTime);
-
-                    tnt.setMetadata(event.getPlayer().getUniqueId().toString(), new FixedMetadataValue(Main.getInstance(), null));
-
-                    Main.registerGameEntity(tnt, game);
-
-                    new BukkitRunnable() {
-                        public void run() {
-                            Main.unregisterGameEntity(tnt);
-                        }
-                    }.runTaskLater(Main.getInstance(), explosionTime + 10);
-                }
             }
         } else if (Main.getConfigurator().config.getBoolean("preventArenaFromGriefing")) {
             for (String gameN : Main.getGameNames()) {
@@ -563,10 +540,6 @@ public class PlayerListener implements Listener {
                         }
                     } else if (edbee.getDamager() instanceof Firework && game.getStatus() == GameStatus.GAME_END_CELEBRATING) {
                         event.setCancelled(true);
-                    } else if (edbee.getDamager() instanceof TNTPrimed) {
-                        if (edbee.getDamager().hasMetadata(player.getUniqueId().toString())) {
-                            edbee.setCancelled(Main.getConfigurator().config.getBoolean("tnt.dont-damage-placer", false));
-                        }
                     } else if (edbee.getDamager() instanceof Projectile) {
                         Projectile projectile = (Projectile) edbee.getDamager();
                         if (projectile.getShooter() instanceof Player) {
@@ -724,19 +697,7 @@ public class PlayerListener implements Listener {
                                                     }
                                                 }
                                             } else {
-                                                if (event.getClickedBlock().getBlockData() instanceof Cake) {
-                                                    Cake cake = (Cake) event.getClickedBlock().getBlockData();
-                                                    if (cake.getBites() == 0) {
-                                                        game.getRegion().putOriginalBlock(event.getClickedBlock().getLocation(), event.getClickedBlock().getState());
-                                                    }
-                                                    cake.setBites(cake.getBites() + 1);
-                                                    if (cake.getBites() >= cake.getMaximumBites()) {
-                                                        game.bedDestroyed(event.getClickedBlock().getLocation(), event.getPlayer(), false, false, true);
-                                                        event.getClickedBlock().setType(Material.AIR);
-                                                    } else {
-                                                        event.getClickedBlock().setBlockData(cake);
-                                                    }
-                                                }
+                                                Player113ListenerUtils.yummyCake(event, game);
                                             }
                                             break;
                                         }

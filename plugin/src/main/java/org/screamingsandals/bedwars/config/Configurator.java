@@ -246,7 +246,7 @@ public class Configurator {
         checkOrSetConfig(modify, "specials.protection-wall.height", 3);
         checkOrSetConfig(modify, "specials.protection-wall.distance", 2);
         checkOrSetConfig(modify, "specials.protection-wall.material", Main.isLegacy() ? "SANDSTONE" : "CUT_SANDSTONE");
-        checkOrSetConfig(modify, "specials.tnt-sheep.speed", 2.0);
+        checkOrSetConfig(modify, "specials.tnt-sheep.speed", 0.25);
         checkOrSetConfig(modify, "specials.tnt-sheep.follow-range", 10.0);
         checkOrSetConfig(modify, "specials.tnt-sheep.max-target-distance", 32);
         checkOrSetConfig(modify, "specials.tnt-sheep.explosion-time", 8);
@@ -264,11 +264,24 @@ public class Configurator {
         checkOrSetConfig(modify, "specials.golem.collidable", false);
         checkOrSetConfig(modify, "specials.teamchest.turn-all-enderchests-to-teamchests", true);
         checkOrSetConfig(modify, "specials.throwable-fireball.explosion", 3.0);
+        checkOrSetConfig(modify, "specials.auto-igniteable-tnt.explosion-time", config.getInt("tnt.explosion-time", 8));
+        checkOrSetConfig(modify, "specials.auto-igniteable-tnt.damage-placer", !config.getBoolean("tnt.dont-damage-placer"));
 
-        checkOrSetConfig(modify, "tnt.auto-ignite", false);
-        checkOrSetConfig(modify, "tnt.explosion-time", 8);
-        checkOrSetConfig(modify, "tnt.dont-damage-placer", false);
+        if (config.isSet("tnt.auto-ignite")) {
+            /* Config migration: tnt.auto-ignite has been replaced with special item */
+            config.set("tnt.auto-ignite", null);
+        }
 
+        if (config.isSet("tnt.explosion-time")) {
+            /* Config migration: tnt.explosion-time has been replaced with specials.auto-igniteable-tnt.explosion-time */
+            config.set("tnt.explosion-time", null);
+        }
+
+        if (config.isSet("tnt.dont-damage-placer")) {
+            /* Config migration: tnt.dont-damage-placer has been replaced with specials.auto-igniteable-tnt.damage-placer with inverted value */
+            config.set("tnt.dont-damage-placer", null);
+        }
+        
         checkOrSetConfig(modify, "sounds.on_bed_destroyed", "ENTITY_ENDER_DRAGON_GROWL");
         checkOrSetConfig(modify, "sounds.on_countdown", "UI_BUTTON_CLICK");
         checkOrSetConfig(modify, "sounds.on_game_start", "ENTITY_PLAYER_LEVELUP");
